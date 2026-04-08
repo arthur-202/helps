@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornada Python: Do Zero ao Júnior</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAFAFA;
+            color: #334155;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Chosen Palette: Warm Neutrals & Teal (Background: #FAFAFA, Text: #334155, Accent: #0F766E) -->
+    <!-- Application Structure Plan: The SPA is designed as an interactive learning dashboard. It moves away from a rigid Markdown table into a dynamic explorer. It starts with a strategic overview of the 8 weeks using a chart to set expectations. Then, it features a central 'Interactive Explorer' where users select a week to see daily tasks, preventing cognitive overload. It follows up with a dedicated visual section for the Mini-Projects to motivate the user, and concludes with quick productivity tips. -->
+    <!-- Visualization & Content Choices: 1. Overview -> Goal: Inform/Organize -> Doughnut Chart -> Shows distribution of study types (theory, practice, projects). 2. Schedule -> Goal: Organize/Explore -> Interactive Sidebar & Cards -> Allows focused reading of one week at a time. 3. Projects -> Goal: Motivate -> Grid Layout -> Visually highlights the portfolio building aspect. NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="bg-teal-800 text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold tracking-wider">🐍 PythonJourney</div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#visao-geral" class="hover:text-teal-200 transition">Visão Geral</a>
+                <a href="#explorador" class="hover:text-teal-200 transition">Cronograma</a>
+                <a href="#projetos" class="hover:text-teal-200 transition">Projetos</a>
+                <a href="#dicas" class="hover:text-teal-200 transition">Dicas</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-white border-b border-stone-200 pt-16 pb-20">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-stone-800 mb-6">Roteiro de Estudos: Python do Zero ao Júnior</h1>
+            <p class="text-lg text-stone-600 leading-relaxed mb-8">
+                Este painel interativo contém o seu plano de 8 semanas para dominar a programação básica em Python e se preparar para o mercado. Com dedicação de 1h a 2h por dia, você construirá uma base sólida focada na prática constante. Navegue pelo painel para entender a distribuição do seu tempo, explorar suas tarefas diárias e visualizar o portfólio que você construirá.
+            </p>
+            <a href="#explorador" class="inline-block bg-teal-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-teal-700 transition transform hover:-translate-y-1">
+                Iniciar Jornada 🚀
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-12 space-y-24">
+
+        <section id="visao-geral" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">Análise Estratégica do Tempo</h2>
+                <p class="text-stone-600 max-w-2xl mx-auto">
+                    Nesta seção, você pode visualizar como seus 48 dias de estudo estão distribuídos. O cronograma foi desenhado para equilibrar o aprendizado teórico com a prática intensa. Note a forte ênfase na construção de projetos e revisões periódicas, elementos essenciais para a consolidação do conhecimento e preparação para o mercado de trabalho.
+                </p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row items-center gap-8">
+                <div class="w-full md:w-1/2">
+                    <div class="chart-container">
+                        <canvas id="timeDistributionChart"></canvas>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 space-y-4">
+                    <h3 class="text-xl font-bold text-stone-800 border-b border-stone-200 pb-2">Distribuição de Foco</h3>
+                    <ul class="space-y-3 text-stone-700">
+                        <li class="flex items-center"><span class="w-4 h-4 rounded-full bg-[#0F766E] mr-3"></span> <strong>26 Dias:</strong> Teoria e Prática de Fundamentos</li>
+                        <li class="flex items-center"><span class="w-4 h-4 rounded-full bg-[#14B8A6] mr-3"></span> <strong>6 Dias:</strong> Mini Projetos Práticos</li>
+                        <li class="flex items-center"><span class="w-4 h-4 rounded-full bg-[#F59E0B] mr-3"></span> <strong>6 Dias:</strong> Revisões de Fixação</li>
+                        <li class="flex items-center"><span class="w-4 h-4 rounded-full bg-[#3B82F6] mr-3"></span> <strong>7 Dias:</strong> Preparação para o Mercado & Ferramentas</li>
+                        <li class="flex items-center"><span class="w-4 h-4 rounded-full bg-[#8B5CF6] mr-3"></span> <strong>3 Dias:</strong> Construção do Projeto Final</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="explorador" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">Explorador Interativo do Cronograma</h2>
+                <p class="text-stone-600 max-w-3xl mx-auto">
+                    Utilize o painel abaixo para navegar semana a semana pelo seu roteiro. Selecione uma semana no menu lateral para revelar as metas e os exercícios práticos diários correspondentes. Esta estrutura interativa ajuda você a manter o foco em uma etapa de cada vez, evitando a sobrecarga de informações e facilitando o acompanhamento do seu progresso diário.
+                </p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="w-full md:w-1/4 bg-white p-4 rounded-2xl shadow-sm border border-stone-100 flex flex-col gap-2" id="week-selector">
+                </div>
+                
+                <div class="w-full md:w-3/4 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-stone-100">
+                    <div class="mb-8 border-b border-stone-200 pb-4">
+                        <h3 id="current-week-title" class="text-2xl font-bold text-teal-800">Selecione uma semana</h3>
+                        <p id="current-week-goal" class="text-stone-500 italic mt-2"></p>
+                    </div>
+                    <div id="days-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projetos" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">Mural de Portfólio</h2>
+                <p class="text-stone-600 max-w-2xl mx-auto">
+                    A programação é aprendida através da resolução de problemas reais. Esta seção destaca todos os projetos que você desenvolverá ao longo das 8 semanas. Ao final da jornada, estes sistemas formarão o seu primeiro portfólio prático, demonstrando sua capacidade de aplicar a lógica, algoritmos, estruturas de dados e manipulação de arquivos em soluções tangíveis.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-stone-50 p-6 rounded-xl border border-stone-200 hover:shadow-md transition">
+                    <div class="text-3xl mb-4">🧮</div>
+                    <h3 class="font-bold text-lg text-stone-800 mb-2">Calculadora de IMC</h3>
+                    <p class="text-sm text-stone-600 mb-4">Semana 1. Entrada de dados e operadores matemáticos básicos.</p>
+                    <span class="inline-block px-2 py-1 bg-teal-100 text-teal-800 text-xs font-semibold rounded">Fundamentos</span>
+                </div>
+                <div class="bg-stone-50 p-6 rounded-xl border border-stone-200 hover:shadow-md transition">
+                    <div class="text-3xl mb-4">🎯</div>
+                    <h3 class="font-bold text-lg text-stone-800 mb-2">Jogo de Adivinhação</h3>
+                    <p class="text-sm text-stone-600 mb-4">Semana 2. Uso intensivo de controle de fluxo e condicionais.</p>
+                    <span class="inline-block px-2 py-1 bg-teal-100 text-teal-800 text-xs font-semibold rounded">Lógica</span>
+                </div>
+                <div class="bg-stone-50 p-6 rounded-xl border border-stone-200 hover:shadow-md transition">
+                    <div class="text-3xl mb-4">⚙️</div>
+                    <h3 class="font-bold text-lg text-stone-800 mb-2">Menu Interativo</h3>
+                    <p class="text-sm text-stone-600 mb-4">Semana 3. Aplicação de laços de repetição infinitos e interrupções.</p>
+                    <span class="inline-block px-2 py-1 bg-teal-100 text-teal-800 text-xs font-semibold rounded">Loops</span>
+                </div>
+                <div class="bg-stone-50 p-6 rounded-xl border border-stone-200 hover:shadow-md transition">
+                    <div class="text-3xl mb-4">✅</div>
+                    <h3 class="font-bold text-lg text-stone-800 mb-2">To-Do List</h3>
+                    <p class="text-sm text-stone-600 mb-4">Semana 4. Gerenciamento de estado na memória usando listas e dicionários.</p>
+                    <span class="inline-block px-2 py-1 bg-teal-100 text-teal-800 text-xs font-semibold rounded">Coleções</span>
+                </div>
+                <div class="bg-stone-50 p-6 rounded-xl border border-stone-200 hover:shadow-md transition">
+                    <div class="text-3xl mb-4">💵</div>
+                    <h3 class="font-bold text-lg text-stone-800 mb-2">Conversor de Moedas</h3>
+                    <p class="text-sm text-stone-600 mb-4">Semana 5. Estruturação do código através da modularização e funções.</p>
+                    <span class="inline-block px-2 py-1 bg-teal-100 text-teal-800 text-xs font-semibold rounded">Modularidade</span>
+                </div>
+                <div class="bg-stone-50 p-6 rounded-xl border border-stone-200 hover:shadow-md transition">
+                    <div class="text-3xl mb-4">📁</div>
+                    <h3 class="font-bold text-lg text-stone-800 mb-2">Sistema de Cadastro TXT</h3>
+                    <p class="text-sm text-stone-600 mb-4">Semana 6. Persistência de dados em disco e tratamento de exceções.</p>
+                    <span class="inline-block px-2 py-1 bg-teal-100 text-teal-800 text-xs font-semibold rounded">Arquivos</span>
+                </div>
+                <div class="bg-teal-700 p-6 rounded-xl border border-teal-800 hover:shadow-lg transition lg:col-span-3 text-center text-white">
+                    <div class="text-4xl mb-4">🏗️</div>
+                    <h3 class="font-bold text-xl mb-2">Projeto Final: Gerenciador de Finanças Pessoais</h3>
+                    <p class="text-teal-100 mb-4 max-w-2xl mx-auto">Semanas 7 e 8. O ápice da sua jornada. Um sistema completo integrando todas as habilidades aprendidas: funções, arquivos, tratamento de erros, versionamento no Git e boas práticas de Clean Code.</p>
+                    <span class="inline-block px-3 py-1 bg-white text-teal-800 text-xs font-bold rounded uppercase tracking-wider">Mestre do Básico</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="dicas" class="scroll-mt-24 mb-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4">Dicas de Ouro</h2>
+                <p class="text-stone-600 max-w-2xl mx-auto">
+                    Aprender a programar exige mais do que apenas escrever código; requer uma mentalidade estratégica. Leia atentamente estas diretrizes antes de iniciar e consulte-as sempre que se sentir travado. Elas são a chave para manter a produtividade e a motivação durante as 8 semanas.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex items-start bg-white p-5 rounded-lg border border-l-4 border-stone-200 border-l-yellow-400">
+                    <div class="text-3xl mr-4 mt-1">⏱️</div>
+                    <div>
+                        <h4 class="font-bold text-stone-800">Consistência é o Segredo</h4>
+                        <p class="text-sm text-stone-600 mt-1">Estudar 30 a 60 minutos todos os dias gera muito mais resultado do que estudar 5 horas apenas no sábado. A repetição diária consolida a sintaxe na memória.</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-white p-5 rounded-lg border border-l-4 border-stone-200 border-l-blue-400">
+                    <div class="text-3xl mr-4 mt-1">🧠</div>
+                    <div>
+                        <h4 class="font-bold text-stone-800">Técnica 50/50</h4>
+                        <p class="text-sm text-stone-600 mt-1">Passe 50% do seu tempo de estudo assistindo a tutoriais ou lendo, e os outros 50% obrigatoriamente codificando sem copiar, tentando resolver por conta própria.</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-white p-5 rounded-lg border border-l-4 border-stone-200 border-l-red-400">
+                    <div class="text-3xl mr-4 mt-1">🚫</div>
+                    <div>
+                        <h4 class="font-bold text-stone-800">Não Decore, Entenda</h4>
+                        <p class="text-sm text-stone-600 mt-1">Foque em compreender a lógica do problema. Se você esquecer a sintaxe exata de um comando, o Google e a documentação do Python estão aí exatamente para isso.</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-white p-5 rounded-lg border border-l-4 border-stone-200 border-l-green-400">
+                    <div class="text-3xl mr-4 mt-1">🕹️</div>
+                    <div>
+                        <h4 class="font-bold text-stone-800">Pratique Além do Roteiro</h4>
+                        <p class="text-sm text-stone-600 mt-1">Sempre que sobrar tempo, utilize plataformas como HackerRank, Beecrowd ou Exercism.org para afiar sua lógica de programação com desafios extras.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-10 text-center bg-teal-50 p-6 rounded-xl border border-teal-100">
+                <p class="text-lg font-bold text-teal-800 italic">"O sucesso na programação é o resultado de pequenos esforços repetidos dia após dia."</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center">
+        <p>Desenvolvido para facilitar a jornada de novos programadores Python.</p>
+    </footer>
+
+    <script>
+        const scheduleData = [
+            {
+                month: "Mês 1",
+                week: 1,
+                title: "O Início da Jornada",
+                goal: "Objetivo: Entender como o computador pensa e dominar a sintaxe básica de variáveis e operadores.",
+                days: [
+                    { day: "Seg", subject: "Instalação e IDE (VS Code)", task: "Imprimir 'Olá Mundo' e configurar o ambiente." },
+                    { day: "Ter", subject: "Variáveis e Tipos", task: "Criar um cadastro simples (Nome, Idade, Peso)." },
+                    { day: "Qua", subject: "Operadores Matemáticos", task: "Criar um programa que calcula a média de 3 notas." },
+                    { day: "Qui", subject: "Entrada de Dados", task: "Programa que pergunta o nome e o ano de nascimento." },
+                    { day: "Sex", subject: "Revisão e Exercícios Fixação", task: "Refazer os códigos dos dias anteriores sem olhar." },
+                    { day: "Sáb", subject: "🚀 Mini Projeto I", task: "Calculadora de IMC: Pede peso e altura e exibe o resultado." }
+                ]
+            },
+            {
+                month: "Mês 1",
+                week: 2,
+                title: "Tomada de Decisão",
+                goal: "Objetivo: Criar caminhos alternativos no seu código baseando-se em condições lógicas.",
+                days: [
+                    { day: "Seg", subject: "Operadores Lógicos", task: "Testar se um número é maior que outro." },
+                    { day: "Ter", subject: "Estruturas Condicionais", task: "Verificar se um usuário é maior de idade (if, elif, else)." },
+                    { day: "Qua", subject: "Condicionais Compostas", task: "Sistema de login simples usando and / or." },
+                    { day: "Qui", subject: "Algoritmos Simples", task: "Criar um verificador de Par ou Ímpar." },
+                    { day: "Sex", subject: "Revisão de Condicionais", task: "Exercícios de 'Qual o maior número?'." },
+                    { day: "Sáb", subject: "🚀 Mini Projeto II", task: "Jogo de Adivinhação: Computador escolhe número, você tenta acertar." }
+                ]
+            },
+            {
+                month: "Mês 1",
+                week: 3,
+                title: "Repetições (Loops)",
+                goal: "Objetivo: Aprender a automatizar tarefas repetitivas sem duplicar código.",
+                days: [
+                    { day: "Seg", subject: "Laço while", task: "Contador de 1 a 10 e contagem regressiva." },
+                    { day: "Ter", subject: "Laço for", task: "Tabuada de um número escolhido pelo usuário." },
+                    { day: "Qua", subject: "Interrupções", task: "Criar um loop infinito que só para se digitar 'sair' (break)." },
+                    { day: "Qui", subject: "Range e Sequências", task: "Gerar listas de números pares entre 0 e 50." },
+                    { day: "Sex", subject: "Revisão de Repetições", task: "Somar todos os números de 1 a 100 usando loop." },
+                    { day: "Sáb", subject: "🚀 Mini Projeto III", task: "Menu de Opções: Um programa que só fecha quando o usuário escolhe 'Sair'." }
+                ]
+            },
+            {
+                month: "Mês 1",
+                week: 4,
+                title: "Coleções de Dados",
+                goal: "Objetivo: Armazenar e manipular múltiplos valores em estruturas organizadas.",
+                days: [
+                    { day: "Seg", subject: "Listas", task: "Criar lista de compras e imprimir itens específicos." },
+                    { day: "Ter", subject: "Métodos de Lista", task: "Adicionar e remover nomes de uma lista de convidados." },
+                    { day: "Qua", subject: "Dicionários", task: "Criar um dicionário de um produto (nome, preço, estoque)." },
+                    { day: "Qui", subject: "Iterando em Coleções", task: "Usar for para listar todos os itens de um dicionário." },
+                    { day: "Sex", subject: "Revisão de Coleções", task: "Criar uma lista de dicionários (Ex: lista de alunos)." },
+                    { day: "Sáb", subject: "🚀 Mini Projeto IV", task: "Lista de Tarefas (To-Do): Adicionar, remover e listar tarefas." }
+                ]
+            },
+            {
+                month: "Mês 2",
+                week: 5,
+                title: "Funções e Modularização",
+                goal: "Objetivo: Escrever código limpo, reutilizável e aprender a estruturar blocos de lógica independente.",
+                days: [
+                    { day: "Seg", subject: "Definição de Funções", task: "Função que recebe um nome e retorna uma saudação." },
+                    { day: "Ter", subject: "Parâmetros e Retorno", task: "Criar função de cálculo de área de retângulo." },
+                    { day: "Qua", subject: "Escopo de Variáveis", task: "Entender a diferença entre variável local e global." },
+                    { day: "Qui", subject: "Importação de Módulos", task: "Usar o módulo math para cálculos avançados." },
+                    { day: "Sex", subject: "Revisão de Funções", task: "Transformar os mini projetos anteriores em funções." },
+                    { day: "Sáb", subject: "🚀 Mini Projeto V", task: "Conversor de Moedas: Funções para converter Real em Dólar/Euro." }
+                ]
+            },
+            {
+                month: "Mês 2",
+                week: 6,
+                title: "Tratamento de Erros e Arquivos",
+                goal: "Objetivo: Fazer seu programa lidar com falhas graciosamente e salvar dados permanentemente.",
+                days: [
+                    { day: "Seg", subject: "Erros e Exceções", task: "Tratar erro de divisão por zero usando try/except." },
+                    { day: "Ter", subject: "Validação de Dados", task: "Garantir que o usuário digite apenas números onde solicitado." },
+                    { day: "Qua", subject: "Lendo Arquivos (.txt)", task: "Criar um programa que lê nomes de um arquivo texto." },
+                    { day: "Qui", subject: "Escrevendo em Arquivos", task: "Salvar a lista de tarefas da semana 4 em um arquivo." },
+                    { day: "Sex", subject: "Revisão de Erros", task: "Criar um log de erros simples em texto." },
+                    { day: "Sáb", subject: "🚀 Mini Projeto VI", task: "Sistema de Cadastro em Arquivo: Salva nomes e e-mails permanentemente." }
+                ]
+            },
+            {
+                month: "Mês 2",
+                week: 7,
+                title: "Mentalidade de Programador",
+                goal: "Objetivo: Aprender as ferramentas e práticas do mundo real para se preparar para entrevistas.",
+                days: [
+                    { day: "Seg", subject: "Introdução ao Git", task: "Aprender git init, add e commit." },
+                    { day: "Ter", subject: "GitHub para Iniciantes", task: "Criar conta e subir seu primeiro repositório." },
+                    { day: "Qua", subject: "Clean Code", task: "Renomear variáveis e organizar funções dos projetos antigos." },
+                    { day: "Qui", subject: "Ler Documentação", task: "Tentar entender uma biblioteca nova (ex: requests)." },
+                    { day: "Sex", subject: "LinkedIn para Devs", task: "Configurar perfil com as tecnologias aprendidas." },
+                    { day: "Sáb", subject: "🏗️ Projeto Final (Parte 1)", task: "Planejar um Gerenciador de Finanças Pessoais." }
+                ]
+            },
+            {
+                month: "Mês 2",
+                week: 8,
+                title: "Consolidação e Vagas",
+                goal: "Objetivo: Finalizar o portfólio e realizar os passos finais em direção à sua primeira oportunidade.",
+                days: [
+                    { day: "Seg", subject: "🏗️ Projeto Final (Parte 2)", task: "Codificar a lógica de entrada e saída de dinheiro." },
+                    { day: "Ter", subject: "🏗️ Projeto Final (Parte 3)", task: "Implementar salvamento em arquivo e tratamento de erros." },
+                    { day: "Qua", subject: "Finalização do Projeto", task: "Subir o projeto final para o GitHub com um bom README." },
+                    { day: "Qui", subject: "Preparação Entrevistas", task: "Estudar perguntas teóricas básicas de Python." },
+                    { day: "Sex", subject: "Busca de Vagas", task: "Procurar vagas de Estágio ou Júnior focando nos requisitos." },
+                    { day: "Sáb", subject: "🥂 Celebração e Próximos Passos", task: "Revisar toda a jornada e planejar o futuro (Web ou Dados)." }
+                ]
+            }
+        ];
+
+        function initSchedule() {
+            const selector = document.getElementById('week-selector');
+            scheduleData.forEach((weekData, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'week-btn w-full text-left px-4 py-3 rounded-xl transition font-medium border border-transparent ' + (index === 0 ? 'bg-teal-700 text-white' : 'bg-white text-stone-700 hover:bg-stone-100 border-stone-200');
+                btn.innerHTML = '<span class="text-xs uppercase tracking-wide opacity-80 block mb-1">' + weekData.month + '</span> Semana ' + weekData.week + ': ' + weekData.title;
+                btn.onclick = function() { loadWeek(index); };
+                selector.appendChild(btn);
+            });
+            loadWeek(0);
+        }
+
+        function loadWeek(index) {
+            const container = document.getElementById('days-container');
+            const titleEl = document.getElementById('current-week-title');
+            const goalEl = document.getElementById('current-week-goal');
+            const btns = document.querySelectorAll('.week-btn');
+            
+            btns.forEach((btn, i) => {
+                if (i === index) {
+                    btn.className = 'week-btn w-full text-left px-4 py-3 rounded-xl transition font-medium border border-transparent bg-teal-700 text-white';
+                } else {
+                    btn.className = 'week-btn w-full text-left px-4 py-3 rounded-xl transition font-medium border border-stone-200 bg-white text-stone-700 hover:bg-stone-100';
+                }
+            });
+
+            const data = scheduleData[index];
+            titleEl.textContent = 'Semana ' + data.week + ': ' + data.title;
+            goalEl.textContent = data.goal;
+            
+            container.innerHTML = '';
+            
+            data.days.forEach(dayInfo => {
+                const isHighlight = dayInfo.subject.includes('Projeto');
+                const card = document.createElement('div');
+                card.className = 'p-5 rounded-xl border transition hover:shadow-md ' + (isHighlight ? 'bg-teal-50 border-teal-200' : 'bg-white border-stone-200');
+                
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'text-xs font-bold uppercase tracking-wide mb-2 ' + (isHighlight ? 'text-teal-700' : 'text-stone-500');
+                dayHeader.textContent = dayInfo.day;
+                
+                const subjectEl = document.createElement('div');
+                subjectEl.className = 'font-bold text-lg mb-2 ' + (isHighlight ? 'text-teal-900' : 'text-stone-800');
+                subjectEl.textContent = dayInfo.subject;
+                
+                const taskEl = document.createElement('div');
+                taskEl.className = 'text-sm ' + (isHighlight ? 'text-teal-800' : 'text-stone-600');
+                taskEl.textContent = dayInfo.task;
+                
+                card.appendChild(dayHeader);
+                card.appendChild(subjectEl);
+                card.appendChild(taskEl);
+                
+                container.appendChild(card);
+            });
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('timeDistributionChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Teoria e Prática', 
+                        'Mini Projetos', 
+                        'Revisões', 
+                        'Mercado e Ferramentas', 
+                        'Projeto Final'
+                    ],
+                    datasets: [{
+                        data: [26, 6, 6, 7, 3],
+                        backgroundColor: [
+                            '#0F766E', 
+                            '#14B8A6', 
+                            '#F59E0B', 
+                            '#3B82F6', 
+                            '#8B5CF6'  
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.raw + ' dias';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initSchedule();
+            initChart();
+        });
+    </script>
+</body>
+</html>
